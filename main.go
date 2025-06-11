@@ -1,40 +1,112 @@
 package main
 
-import "fmt"
+import (
+	"fmt"
+)
+
 
 func main() {
-	var conferenceName = "Olyzano Conference"
-	const conferenceTickers = 50
-	var remainingTickets = 50
 
-	fmt.Printf("Welcome to our %s booking appliacation\n", conferenceName)
-	fmt.Printf("We have a total of %d tickets and are still available %d for booking\n",  conferenceTickers, remainingTickets )
-	fmt.Println("Get your tickets here to attend the conference")
+	option := 0
+
+	// uang yang dimiliki player
+
+	// staterpack player
+	const money = 100000
+	remainingMoney := money
+
+	// daftar item di toko
+	// setiap item adalah map dengan nama, harga, dan stok
+
+		shopItems := []map[string]interface{} {
+			{
+				"nama": "Barbarian",
+				"harga": 10000,
+				"stok": 10,
+			},
+			{
+				"nama": "Assassin",
+				"harga": 15000,
+				"stok": 5,
+			},
+			{
+				"nama": "Tank",
+				"harga": 12000,
+				"stok": 5,
+			},
+		}
 
 
-	var bookings = [50]string{}
-
-	var userFirstName  string
-	var userLastName  string
-	var userEmail string
-	var userTickets int
-	fmt.Println("Enter your first name:")
-	fmt.Scan(&userFirstName)
-
-	fmt.Println("Enter your Last name:")
-	fmt.Scan(&userLastName)
-	fmt.Println("Enter number of tickets:")
-	fmt.Scan(&userTickets)
-	remainingTickets = remainingTickets - userTickets
-
-	bookings[0] = userName
+	
 
 
-	if userTickets <= remainingTickets {	
-		fmt.Printf("The whole booking list is: %s\n", bookings)
-		fmt.Printf("The whole firstbooking list is: %v\n", bookings[0])
-		fmt.Printf("%s booked %d tickets. You have %d tickets remaining.\n", userName, userTickets, remainingTickets)
-	}else {
-		fmt.Printf("Sorry %s, we only have %d tickets remaining. You cannot book %d tickets.\n", userName, remainingTickets, userTickets)
+	for  {	
+		fmt.Print("=======================================\n")
+		fmt.Print("              TOKO KEPIN               \n")
+		fmt.Print("=======================================\n")
+		fmt.Print("1. Beli\n")
+		fmt.Print("2. Jual\n")
+		fmt.Print("3. Keluar\n")
+		fmt.Print("=======================================\n")
+
+		fmt.Print("Masukkan pilihan (1-3): ")
+		fmt.Scan(&option)
+
+		if option == 1 {
+
+	
+
+		for i := range shopItems {
+			fmt.Printf("%d. %s - Rp%d (Stok: %d)\n", i+1, shopItems[i]["nama"], shopItems[i]["harga"], shopItems[i]["stok"])
+		}
+		fmt.Printf("Pilih item yang ingin dibeli (1-%d): ", len(shopItems))
+		var itemchoice int
+		fmt.Scan(&itemchoice)
+		if itemchoice > len(shopItems) {
+			fmt.Println("Pilihan tidak valid.")
+			continue
+		}else {
+			item := shopItems[itemchoice-1]
+			price := item["harga"].(int)
+			stok := item["stok"].(int)	
+
+			if stok <= 0 {
+				fmt.Println("Stok tidak tersedia.")
+				continue
+			}
+
+			var quantity int
+			fmt.Printf("Masukkan jumlah %s yang ingin dibeli: ", item["nama"])
+			fmt.Scan(&quantity)
+			if quantity <= 0 {
+				fmt.Println("Jumlah tidak valid.")
+				continue
+			}
+
+			if quantity > stok {
+				fmt.Printf("Maaf, stok %s tidak mencukupi. Stok saat ini: %d\n", item["nama"], stok)
+				continue
+			}
+			totalPrice := price * quantity
+			if totalPrice > remainingMoney {
+				fmt.Printf("Maaf, uang Anda tidak mencukupi. Total harga: Rp%d\n", totalPrice)
+				continue
+			}
+
+			// update stok 
+			
+
+			item["stok"] = stok - quantity
+			fmt.Printf("Anda telah membeli %d %s dengan total harga Rp%d. Sisa uang Anda: Rp%d\n", quantity, item["nama"], totalPrice, remainingMoney - totalPrice)
+			remainingMoney -= totalPrice
+			fmt.Printf("Stok %s sekarang: %d\n", item["nama"], item["stok"].(int) - quantity)
+			continue
+		}
+
+		
+
+		
 	}
+		
+}
 }
